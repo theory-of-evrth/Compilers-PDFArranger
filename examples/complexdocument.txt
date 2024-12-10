@@ -1,0 +1,2 @@
+TEXT #00FF00 (200,300) 25 "Once upon a time...";
+TEXT #00FF00 (200,200) 25 "in a faraway land"; LINE #0000AA (100,100) 200

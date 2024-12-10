@@ -1,5 +1,8 @@
 import ply.yacc as yacc
 
+from lexerPDF import tokens 
+
+
 """
 TODO: treatment of numbers, variables, cycles
 

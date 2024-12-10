@@ -4,8 +4,7 @@ import ply.lex as lex
 Lexer for the PDF Compiler
 
 Authoring: Keschubay Jun (base from TP4 corrections)
-started: 10/12/2024
-
+started and done: 10/12/2024
 """
 
 reserved_words = ( 
@@ -22,10 +21,10 @@ tokens = (
 	'MUL_OP',
 	'COLOR', # for starters: only in HEX format (#FFFFFF)
 	'IDENTIFIER',
-	'CONTENT' # only recognises if in ""
+	'CONTENT' # only recognises if wrapped in ""
 ) + tuple(map(lambda s:s.upper(),reserved_words)) 
 
-literals = '();='
+literals = '();=,'
 
 def t_ADD_OP(t):
 	r'[+-]'
@@ -45,9 +44,8 @@ def t_NUMBER(t):
 	return t
 
 def t_CONTENT(t):
-	# to figure out how to include spec. symbols: https://stackoverflow.com/questions/18057962/regex-pattern-including-all-special-characters
-	r'"[A-Za-z_0-9 \p{P}\p{S}]+"'
-	return t
+    r'".+"'
+    return t
 
 def t_IDENTIFIER(t):
     r'[A-Za-z_]\w*'
@@ -55,17 +53,11 @@ def t_IDENTIFIER(t):
         t.type = t.value.upper() 
     return t
 
-
-
 def t_COLOR(t):
-	r'\#[0-9|A-F|a-f]{5,5}'
+	r'\#[0-9|A-F|a-f]{6,6}'
 	return t
-	
-def t_newline(t):
-	r'\n+'
-	t.lexer.lineno += len(t.value)
 
-t_ignore  = ' \t'
+t_ignore  = ' \t\n'
 
 def t_error(t):
 	print ("Illegal character '%s'" % repr(t.value[0]))
