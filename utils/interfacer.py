@@ -24,3 +24,24 @@ needed functions:
 
 !! spumoni for overlap. Test with overlapping of different elements
 """
+
+def createCanvas():
+    pass
+
+def drawLine(position, color, size):
+    pass
+
+def drawCircle(position, color, size):
+    pass
+
+def drawTriangle(position, color, size):
+    pass
+
+def drawText(position, color, size, content, font=20):
+    pass
+
+def setBackgroundColor(color):
+    pass
+
+def saveFileAs(fileName):
+    pass
