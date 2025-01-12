@@ -76,7 +76,6 @@ class Interfacer:
     def drawTriangle(self, vertices):
         p = self.c.beginPath(vertices)
         self.c.drawPath(p)
-        self.c.
 
         self.c.drawPath(aPath=p)
 
