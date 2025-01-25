@@ -6,6 +6,6 @@ if i < 10 {
 LINE #00A0AA (k,k) 200
 };
 if i > 10 {
-LINE #FFA0FF (k,k) 200
-}
+LINE #FFA0FF (k,k) 200;
+};
 }
