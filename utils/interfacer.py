@@ -75,8 +75,12 @@ class Interfacer:
         """
         self.c.rect(x=position[0], y=position[1], width=width, height=height, stroke=border, fill=fill)
 
-    def drawTriangle(self, vertices):
-        p = self.c.beginPath(vertices)
+    def drawTriangle(self, p1, p2, p3):
+        p = self.c.beginPath()
+        p.moveTo(p1[0], p1[1])
+        p.lineTo(p2[0], p2[1])
+        p.lineTo(p3[0], p3[1])
+        p.close()
         self.c.drawPath(p)
 
         self.c.drawPath(aPath=p)
@@ -113,7 +117,7 @@ class Interfacer:
 
 if __name__ == "__main__":
     # test if library is working
-    interfacer = Interfacer("compil/Compilers-PDFArranger/generated/hello.pdf")
+    interfacer = Interfacer("./generated/hello.pdf")
     interfacer.setBackgroundColor("#00DD00")
     interfacer.drawLine([10, 700, 10, 750])
     interfacer.setColor("#FF0000", "#0000FF", "0x662366")
@@ -121,7 +125,7 @@ if __name__ == "__main__":
     interfacer.drawCircle([100, 100], 20)
     interfacer.drawRectangle(position=[200, 100], width=30, height=35, fill=0)
     interfacer.drawCircle(centre=[300, 100], radius=20, border=0)
-    interfacer.drawTriangle(30, 600)
+    interfacer.drawTriangle((30, 600), (30, 500), (50, 650))
 
     c = interfacer.getCanvas()
     c.showPage()
