@@ -13,6 +13,7 @@ structure - > for
 precedence = (
     ('left', 'ADD_OP'),
     ('left', 'MUL_OP'),
+    ('left', 'COMPARE_OP'),
     ('right', 'UMINUS'),
 )
 
@@ -59,7 +60,7 @@ def p_expression_num_or_var(p):
  
 def p_minus(p): 
     ''' expression : ADD_OP expression %prec UMINUS''' 
-    p[0] = AST.OpNode(p[1], p[2]) 
+    p[0] = AST.OpNode(p[1], 0.0, p[2]) 
 
 def p_parentheses(p):
     ''' expression : '(' expression ')' '''
@@ -76,5 +77,5 @@ if __name__ == "__main__":
     import sys 
 
     prog = open(sys.argv[1]).read()
-    result = yacc.parse(prog, debug=True)
+    result = yacc.parse(prog)
     print(result)

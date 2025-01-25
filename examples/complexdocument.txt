@@ -1,6 +1,11 @@
 TEXT #00FF00 (200,300) 25 "Once upon a time...";
 TEXT #00FF00 (200,200) 25 "in a faraway land"; LINE #0000AA (100,100) 200;
-for i = 1 to 12 {
+for i = 1 to 50 {
 k = 10 + 10*i;
-LINE #0000AA (100,k) 200
+if i < 10 {
+LINE #00A0AA (k,k) 200
+};
+if i > 10 {
+LINE #FFA0FF (k,k) 200
+}
 }

@@ -1,7 +1,6 @@
-import functools
 import operator
 
-operations = {
+OPERATIONS = {
     '+': operator.add,
     '-': operator.sub,
     '*': operator.mul,
@@ -36,6 +35,14 @@ class Node:
         return type(self).__name__
 
 vars = {}
+INTERFACER: 'utils.interfacer.Interfacer' = None
+
+def save_all_children_decorator(init):
+    def decorated_init(self, *children):
+        self.children = children
+        init(self, *children)
+
+    return decorated_init
 
 class ProgramNode(Node):
     def execute(self):
@@ -43,6 +50,7 @@ class ProgramNode(Node):
             statement.execute()
 
 class ForNode(Node):
+    @save_all_children_decorator
     def __init__(self, var, start, end, program):
         self.var = var
         self.start = start
@@ -50,21 +58,24 @@ class ForNode(Node):
         self.program = program
 
     def execute(self):
-        for i in range(self.start, self.end + 1):
+        for i in range(int(self.start.execute()), int(self.end.execute()) + 1):
             vars[self.var] = i
             self.program.execute()
         del vars[self.var] # cleans iterator
 
 class IfNode(Node):
+    @save_all_children_decorator
     def __init__(self, condition, body):
         self.condition = condition
         self.body = body
 
     def execute(self):
         if self.condition.execute():
+            ##print(f'IF succeded, {self.condition = }, {self.condition.execute()}')
             self.body.execute()
 
 class TokenNode(Node):
+    @save_all_children_decorator
     def __init__(self, token):
         self.token = token
 
@@ -76,27 +87,83 @@ class TokenNode(Node):
                 print(f"Error: variable {self.token} is undefined!")
         return self.token
 
+
 class OpNode(Node):
-    def __init__(self, operation, *operands):
+    @save_all_children_decorator
+    def __init__(self, operation, op1, op2):
         self.operation = operation
-        self.operands = operands
+        self.op1 = op1
+        self.op2 = op2
 
     def execute(self):
-        args = [expr.execute() for expr in self.operands]
-        if len(args) == 1:
-            args = [0] + args
-        result = functools.reduce(operations[self.operation], args)
-        return float(result)
+        return float(OPERATIONS[self.operation](
+            self.op1.execute(),
+            self.op2.execute(),
+        ))
+
 
 class AssignNode(Node):
-    
+    @save_all_children_decorator
+    def __init__(self, var, expr):
+        self.var = var
+        self.expr = expr
+
     def execute(self):
-        vars[self.children[0].tok] = self.children[1].execute()
+        vars[self.var] = self.expr.execute()
+
 
 class FigureCmdNode(Node):
-    # TODO : call interfacer to draw figure
-    ...
+    @save_all_children_decorator
+    def __init__(self, figure_type, color, positionX, positionY, size):
+        self.figure_type = figure_type
+        self.color = color
+        self.positionX = positionX
+        self.positionY = positionY
+        self.size = size
+    
+    def execute(self):
+        pos_x = self.positionX.execute()
+        pos_y = self.positionY.execute()
+        size = self.size.execute()
+
+        INTERFACER.setColor(self.color, self.color)
+        halfsize = size // 2
+
+        if self.figure_type == "LINE":
+            A = [pos_x - halfsize, pos_y]
+            B = [pos_x + halfsize, pos_y]
+            INTERFACER.drawLine([*A, *B])
+
+        elif self.figure_type == "CIRCLE":
+            INTERFACER.drawCircle([pos_x, pos_y], size, halfsize)
+
+        elif self.figure_type == "TRIANGLE":
+            A = [pos_x - halfsize, pos_y - halfsize]
+            B = [pos_x + halfsize, pos_y - halfsize]
+            C = [pos_x, pos_y + halfsize]
+            INTERFACER.drawTriangle([A, B, C])
+
+        else:
+            print("Error: Unrecognised figure type")
+
 
 class TextNode(Node):
-    # TODO : call interfacer to draw text
-    pass
+    @save_all_children_decorator
+    def __init__(self, color, positionX, positionY, size, content):
+        self.color = color
+        self.positionX = positionX
+        self.positionY = positionY
+        self.size = size
+        self.content = content
+
+    def execute(self):
+        pos_x = self.positionX.execute()
+        pos_y = self.positionY.execute()
+        size = self.size.execute()
+
+        INTERFACER.setColor(None, None, self.color)
+        INTERFACER.drawText(
+            [pos_x, pos_y],
+            content=self.content,
+            size=size,
+        )

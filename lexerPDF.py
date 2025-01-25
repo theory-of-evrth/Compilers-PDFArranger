@@ -12,7 +12,7 @@ reserved_words = (
  'for',
  'to',
  'if',
- 'else',
+ #'else',
  'TEXT'
 ) 
 
@@ -39,6 +39,7 @@ def t_MUL_OP(t):
 
 def t_COMPARE_OP(t):
 	r'(==|!=|>|<|>=|<=)'
+	return t
 
 def t_NUMBER(t):
 	r'\d+(\.\d+)?'
