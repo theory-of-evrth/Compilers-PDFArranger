@@ -1,0 +1,6 @@
+for i = 1 to 50 {
+LINE #FFFF00 (350,700 + i) 2
+};
+for i = 1 to 50 {
+LINE #B0FF00 (250 + i,700 + i) 2
+};
