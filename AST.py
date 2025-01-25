@@ -53,7 +53,7 @@ class ForNode(Node):
         for i in range(self.start, self.end + 1):
             vars[self.var] = i
             self.program.execute()
-        del vars[self.var] # cleans iterator 
+        del vars[self.var] # cleans iterator
 
 class IfNode(Node):
     def __init__(self, condition, body):
@@ -85,7 +85,8 @@ class OpNode(Node):
         args = [expr.execute() for expr in self.operands]
         if len(args) == 1:
             args = [0] + args
-        return functools.reduce(operations[self.operation], args)
+        result = functools.reduce(operations[self.operation], args)
+        return float(result)
 
 class AssignNode(Node):
     
