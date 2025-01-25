@@ -5,7 +5,7 @@ Lexer for the PDF Compiler
 
 Authoring: Keschubay Jun (base from TP4 corrections)
 started and done: 10/12/2024
-further edited to accomodate structure better: 25/01/2025
+further edited to accomodate structure better: 24/01/2025
 """
 
 reserved_words = ( 

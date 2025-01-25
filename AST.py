@@ -167,3 +167,7 @@ class TextNode(Node):
             content=self.content,
             size=size,
         )
+
+class NoopNode(Node):
+    def execute(self):
+        pass

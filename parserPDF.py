@@ -4,10 +4,10 @@ from lexerPDF import tokens
 import AST
 
 """
-TODO: treatment of numbers, variables, cycles, conditions
+Parser for the PDF Compiler
 
-statement - > elementcreation
-structure - > for
+Authoring: Keschubay Jun (base from TP4 corrections)
+Completed: 24/01/2025
 """
 
 precedence = (
@@ -16,6 +16,7 @@ precedence = (
     ('left', 'COMPARE_OP'),
     ('right', 'UMINUS'),
 )
+
 
 def p_program_input(p):
     ''' program : statement '''
@@ -44,6 +45,11 @@ def p_for_structure(p):
 def p_if_structure(p):
     ''' statement : IF expression '{' program '}' '''
     p[0] = AST.IfNode(p[2], p[4])
+
+def p_statement_noop(p):
+    ''' statement : '''
+    p[0] = AST.NoopNode()
+
 
 def p_expression_op(p):
     '''
