@@ -85,6 +85,22 @@ class Interfacer:
 
         self.c.drawPath(aPath=p)
 
+    def drawShape(self, pointList, pointNumber):
+        """draw any shape
+
+        Args:
+            pointList (_type_): list of point representing the corner of the shape
+            pointNumber (_type_): number of element in pointList
+        """
+        p = self.c.beginPath()
+        p.moveTo(pointList[0][0], pointList[0][0])
+        for point in pointList:
+            p.lineTo(point[0], point[1])
+        p.close()
+        self.c.drawPath(p)
+
+        self.c.drawPath(aPath=p)
+
     def drawText(self, position: arr.array[float], content: list[str], font="Helvetica", size=20):
         """Draw text in the PDF.
 
