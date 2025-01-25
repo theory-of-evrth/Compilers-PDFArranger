@@ -135,7 +135,7 @@ class FigureCmdNode(Node):
             INTERFACER.drawLine([*A, *B])
 
         elif self.figure_type == "CIRCLE":
-            INTERFACER.drawCircle([pos_x, pos_y], size, halfsize)
+            INTERFACER.drawCircle([pos_x, pos_y], size)
 
         elif self.figure_type == "TRIANGLE":
             A = [pos_x - halfsize, pos_y - halfsize]

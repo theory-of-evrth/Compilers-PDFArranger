@@ -55,7 +55,7 @@ class Interfacer:
         self.c.setStrokeColor(aColor=self.borderColor)
 
     def drawLine(self, positions: arr.array[float]):
-        """draw a line based on a point and a length.
+        """draw a line based on two points.
 
         Args:
             position : an array containing the coordinates of the starting and ending points of the line
@@ -66,9 +66,7 @@ class Interfacer:
     def drawCircle(self, centre: arr.array[float], radius: float, border: int = 1, fill: int = 1):
         self.c.circle(x_cen=centre[0], y_cen=centre[1], r=radius, stroke=border, fill=fill)
 
-    def drawRectangle(
-        self, position: arr.array[float], width: float, height: float = 20, border: int = 1, fill: int = 1
-    ):
+    def drawRectangle(self, position: arr.array[float], width: float, height: float, border: int = 1, fill: int = 1):
         """Args:
         position : coordinate of the bottom left corner
         size : array containg with an height
