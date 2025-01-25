@@ -1,41 +1,45 @@
 import operator
 
 OPERATIONS = {
-    '+': operator.add,
-    '-': operator.sub,
-    '*': operator.mul,
-    '/': operator.truediv,
-    '==': operator.eq,
-    '!=': operator.ne,
-    '<': operator.lt,
-    '>': operator.gt,
-    '<=': operator.le,
-    '>=': operator.ge,
+    "+": operator.add,
+    "-": operator.sub,
+    "*": operator.mul,
+    "/": operator.truediv,
+    "==": operator.eq,
+    "!=": operator.ne,
+    "<": operator.lt,
+    ">": operator.gt,
+    "<=": operator.le,
+    ">=": operator.ge,
 }
 
+
 class Node:
-    type = 'Node'
+    type = "Node"
+
     def __init__(self, *children):
         self.children = children
 
-    def asciitree(self, prefix=''):
+    def asciitree(self, prefix=""):
         result = f"{prefix}{self!r}\n"
-        prefix += '|  '
+        prefix += "|  "
         for child in self.children:
             if not isinstance(child, Node):
                 result += f"{prefix} {type(child)!r}: {child!r}\n"
             else:
                 result += child.asciitree(prefix)
         return result
-    
+
     def __str__(self):
         return self.asciitree()
-    
+
     def __repr__(self):
         return type(self).__name__
 
+
 vars = {}
-INTERFACER: 'utils.interfacer.Interfacer' = None
+INTERFACER: "utils.interfacer.Interfacer" = None
+
 
 def save_all_children_decorator(init):
     def decorated_init(self, *children):
@@ -44,10 +48,12 @@ def save_all_children_decorator(init):
 
     return decorated_init
 
+
 class ProgramNode(Node):
     def execute(self):
         for statement in self.children:
             statement.execute()
+
 
 class ForNode(Node):
     @save_all_children_decorator
@@ -61,7 +67,8 @@ class ForNode(Node):
         for i in range(int(self.start.execute()), int(self.end.execute()) + 1):
             vars[self.var] = i
             self.program.execute()
-        del vars[self.var] # cleans iterator
+        del vars[self.var]  # cleans iterator
+
 
 class IfNode(Node):
     @save_all_children_decorator
@@ -73,6 +80,7 @@ class IfNode(Node):
         if self.condition.execute():
             ##print(f'IF succeded, {self.condition = }, {self.condition.execute()}')
             self.body.execute()
+
 
 class TokenNode(Node):
     @save_all_children_decorator
@@ -96,10 +104,12 @@ class OpNode(Node):
         self.op2 = op2
 
     def execute(self):
-        return float(OPERATIONS[self.operation](
-            self.op1.execute(),
-            self.op2.execute(),
-        ))
+        return float(
+            OPERATIONS[self.operation](
+                self.op1.execute(),
+                self.op2.execute(),
+            )
+        )
 
 
 class AssignNode(Node):
@@ -120,7 +130,7 @@ class FigureCmdNode(Node):
         self.positionX = positionX
         self.positionY = positionY
         self.size = size
-    
+
     def execute(self):
         pos_x = self.positionX.execute()
         pos_y = self.positionY.execute()
@@ -141,7 +151,7 @@ class FigureCmdNode(Node):
             A = [pos_x - halfsize, pos_y - halfsize]
             B = [pos_x + halfsize, pos_y - halfsize]
             C = [pos_x, pos_y + halfsize]
-            INTERFACER.drawTriangle([A, B, C])
+            INTERFACER.drawTriangle(A, B, C)
 
         else:
             print("Error: Unrecognised figure type")
@@ -167,6 +177,7 @@ class TextNode(Node):
             content=self.content,
             size=size,
         )
+
 
 class NoopNode(Node):
     def execute(self):
